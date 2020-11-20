@@ -18,10 +18,11 @@ const TaskDetailScreen = ({ navigation }) => {
         onPress={() => navigation.goBack()}
       />
       <View style={styles.line}>
-          <Text style={{marginRight: 10}}>STATO</Text>
-          <Badge value={<Text style={{padding: 20}}>Da completare</Text>} status='error' />
+        <Text style={{ marginRight: 10 }}>STATO</Text>
+        <Badge value={<Text style={{ padding: 20 }}>Da completare</Text>} status='error' />
+        <Text>{specificTask.Isle.city}</Text>
       </View>
-      
+
       <Text>{specificTask.status}</Text>
     </View>
   );

@@ -1,8 +1,14 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { colors } from '../constants/color';
+//Component
 import HeaderComponent from '../components/HeaderComponent';
-import { FontAwesome } from '@expo/vector-icons';
-
+import Divider from '../components/Divider';
+import AccountData from '../components/AccountData';
+import AccountButton from '../components/AccountButton';
+import { FontAwesome5 } from '@expo/vector-icons';
+//Context
 import { Context as AuthContext } from '../context/AuthContext';
 
 const AccountScreen = ({ navigation }) => {
@@ -15,52 +21,58 @@ const AccountScreen = ({ navigation }) => {
                 iconName='sign-out'
                 onPress={signout}
             />
-            {/* Da trasformare in componente  */}
-            <View style={styles.container}>
-                <View style={styles.avatar}>
-                    <FontAwesome name="user-o" style={styles.icon} />
+            <ScrollView>
+                <AccountData
+                    firstName={state.user.firstName}
+                    lastName={state.user.lastName}
+                    role={state.user.role}
+                />
+                <Divider />
+                <View style={styles.actionContainerTitle}>
+                    <Text style={styles.actionTitle}>Azioni Rapide</Text>
+                    <FontAwesome5 name="grip-lines" size={24} color={colors.primary} />
                 </View>
-                <View style={styles.info}>
-                    <Text style={styles.textInfo}>Nome : {state.user.firstName} </Text>
-                    <Text style={styles.textInfo}>Cognome : {state.user.lastName} </Text>
-                    <Text style={styles.textInfo}>Ruolo: {state.user.role}</Text>
 
-                </View>
-            </View>
-            <Text>Azioni Rapide</Text>
+                {state.user.role == 'ADMIN' ?
+                    <View >
+                        <AccountButton title='Inserisci Annuncio' />
+                        <AccountButton title='Gestisci Annunci' />
+                        <AccountButton title='Inserisci Dipendente' />
+                        <AccountButton title='Inserisci Mezzo' />
+                        <AccountButton title='Info Dipendenti' />
+                        <AccountButton title='Info Mezzi' />
+                        <AccountButton title='Aggiorna Profilo' />
+                    </View>
 
-
-
-
+                    :
+                    <Text style={{ textAlign: "center" }}>Non sei un amministratore , azioni rapide ancora non disponibili</Text>
+                }
+            </ScrollView>
         </>
-    )
-}
+    );
+};
+
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: "row"
-    },
-    avatar: {
-        height: 80,
-        width: 80,
-        margin: 15,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+
+    //Azioni Rapide
+    actionContainer: {
+        height: 60,
         backgroundColor: 'lightgrey',
-        borderRadius: 40
+        margin: 5,
+        borderRadius: 8
     },
-    icon: {
-        fontSize: 36,
-        color: 'white'
+    actionContainerTitle:{
+        flexDirection: "row",
+        marginHorizontal: 15,
+        marginVertical: 15,
+        justifyContent: "space-between",
     },
-    info: {
-        justifyContent: "center",
-    },
-    textInfo:{
-        marginVertical: 2,
+    actionTitle: {
+        
+        fontSize: 20,
         fontWeight: "bold",
-        fontSize: 16
+        color: colors.primary
     }
 });
 

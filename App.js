@@ -13,11 +13,13 @@ import TaskListScreen from './src/screens/TaskListScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 // Colors
 import {colors} from './src/constants/color';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ProcessProvider } from './src/context/ProcessContext';
 
 import { setNavigator } from './src/navigationRef';
+
 
 
 const switchNavigator = createSwitchNavigator({
