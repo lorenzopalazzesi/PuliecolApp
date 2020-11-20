@@ -7,9 +7,9 @@ import {navigate} from '../navigationRef';
 const authReducer = (state , action) => {
     switch(action.type){
         case 'signin':
-            return{errorMessage: '' , token: action.payload.token , userRole: action.payload.userRole};
+            return{errorMessage: '' , token: action.payload.token , user: action.payload.user};
         case 'signout':
-            return {token: null , errorMessage: ''};
+            return {token: null , errorMessage: '' , user: []};
         case 'add_error_message':
             return{...state , errorMessage: action.payload};
         case 'clear_error_message':
@@ -24,7 +24,7 @@ const signin = (dispatch) => async({username , password}) => {
         const response = await puliecolServer.post('/auth/login', {username , password });
         await AsyncStorage.setItem('token' , response.data.token);
         const responseRole = await puliecolServer.get('/users/profile');
-        dispatch({type: 'signin' , payload: {token: response.data.token , userRole: responseRole.data.role}});
+        dispatch({type: 'signin' , payload: {token: response.data.token , user: responseRole.data}});
         console.log('Accesso effettuato con il Token: ' + response.data.token + ' ' + responseRole.data.role);
         if(responseRole.data.role == 'ADMIN') {
             navigate('mainFlow');
@@ -42,7 +42,7 @@ const tryLocalSignin = dispatch => async () => {
     if (token) {
         try{
             const responseRole = await puliecolServer.get('/users/profile');
-            dispatch({ type: 'signin', payload: {token: token , userRole: responseRole.data.role} });
+            dispatch({ type: 'signin', payload: {token: token , user: responseRole.data} });
             console.log('Accesso Già Effettuato con Token: ' + token + ' ' + responseRole.data.role);
             if(responseRole.data.role == 'ADMIN') {
                 navigate('mainFlow');
@@ -83,7 +83,7 @@ export const { Provider, Context } = createDataContext(
     },
     {
         token: null,
-        userRole: null,
+        user: [],
         errorMessage: ''
     }
 );

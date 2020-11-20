@@ -53,7 +53,11 @@ const switchNavigator = createSwitchNavigator({
   }),
   //Flusso di navigazione che si attiva autenticandosi come DRIVER
   mainFlowDriver: createBottomTabNavigator({
-    Account: AccountScreen
+    isleListFlow: createStackNavigator({
+      IsleList: IsleListScreen,
+      IsleDetail: IsleDetailScreen,
+    }),
+    Account: AccountScreen,
   })
   //Da aggiungere un altro flow secondo me ( mainFlow Admin) che mostrerà schermate in piu all 'admin
 });

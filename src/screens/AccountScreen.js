@@ -1,26 +1,67 @@
-import React , {useContext} from 'react';
-import { StyleSheet, Text, View , SafeAreaView} from 'react-native';
-import { Button} from 'react-native-elements';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
-import {Context as AuthContext} from '../context/AuthContext';
+import { FontAwesome } from '@expo/vector-icons';
 
-const AccountScreen = ({navigation}) => {
-    const {state , signout} = useContext(AuthContext);
+import { Context as AuthContext } from '../context/AuthContext';
+
+const AccountScreen = ({ navigation }) => {
+    const { state, signout } = useContext(AuthContext);
 
     return (
         <>
-            <HeaderComponent 
+            <HeaderComponent
                 headerTitle='Il mio Profilo'
                 iconName='sign-out'
                 onPress={signout}
             />
-            <Text>{state.userRole}</Text>
+            {/* Da trasformare in componente  */}
+            <View style={styles.container}>
+                <View style={styles.avatar}>
+                    <FontAwesome name="user-o" style={styles.icon} />
+                </View>
+                <View style={styles.info}>
+                    <Text style={styles.textInfo}>Nome : {state.user.firstName} </Text>
+                    <Text style={styles.textInfo}>Cognome : {state.user.lastName} </Text>
+                    <Text style={styles.textInfo}>Ruolo: {state.user.role}</Text>
+
+                </View>
+            </View>
+            <Text>Azioni Rapide</Text>
+
+
+
+
         </>
     )
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flexDirection: "row"
+    },
+    avatar: {
+        height: 80,
+        width: 80,
+        margin: 15,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'lightgrey',
+        borderRadius: 40
+    },
+    icon: {
+        fontSize: 36,
+        color: 'white'
+    },
+    info: {
+        justifyContent: "center",
+    },
+    textInfo:{
+        marginVertical: 2,
+        fontWeight: "bold",
+        fontSize: 16
+    }
 });
 
 
