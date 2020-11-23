@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { colors } from '../constants/color';
@@ -13,9 +13,10 @@ import { Context as AuthContext } from '../context/AuthContext';
 
 const AccountScreen = ({ navigation }) => {
     const { state, signout } = useContext(AuthContext);
+    const [help, setHelp] = useState(true);
 
     return (
-        <>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
             <HeaderComponent
                 headerTitle='Il mio Profilo'
                 iconName='sign-out'
@@ -35,12 +36,15 @@ const AccountScreen = ({ navigation }) => {
 
                 {state.user.role == 'ADMIN' ?
                     <View >
-                        <AccountButton title='Inserisci Annuncio' />
-                        <AccountButton title='Gestisci Annunci' />
-                        <AccountButton title='Inserisci Dipendente' />
+                        <AccountButton
+                            title='Info Dipendenti'
+                            routeName='DriverList' />
+                        <AccountButton
+                            title='Info Mezzi'
+                            routeName='TruckList'
+                        />
                         <AccountButton title='Inserisci Mezzo' />
-                        <AccountButton title='Info Dipendenti' />
-                        <AccountButton title='Info Mezzi' />
+                        <AccountButton title='Inserisci Dipendente' />
                         <AccountButton title='Aggiorna Profilo' />
                     </View>
 
@@ -48,10 +52,15 @@ const AccountScreen = ({ navigation }) => {
                     <Text style={{ textAlign: "center" }}>Non sei un amministratore , azioni rapide ancora non disponibili</Text>
                 }
             </ScrollView>
-        </>
+        </View>
     );
 };
 
+AccountScreen.navigationOptions = () => {
+    return {
+        headerShown: false
+    };
+};
 
 const styles = StyleSheet.create({
 
@@ -62,14 +71,14 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8
     },
-    actionContainerTitle:{
+    actionContainerTitle: {
         flexDirection: "row",
         marginHorizontal: 15,
         marginVertical: 15,
         justifyContent: "space-between",
     },
     actionTitle: {
-        
+
         fontSize: 20,
         fontWeight: "bold",
         color: colors.primary

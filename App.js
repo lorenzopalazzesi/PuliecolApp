@@ -11,6 +11,9 @@ import LoginScreen from './src/screens/LoginScreen';
 import TaskDetailScreen from './src/screens/TaskDetailScreen';
 import TaskListScreen from './src/screens/TaskListScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
+import TruckListScreen from './src/screens/TruckListScreen';
+import DriverListScreen from './src/screens/DriverListScreen';
+import CreateTaskScreen from './src/screens/CreateTaskScreen';
 // Colors
 import {colors} from './src/constants/color';
 import { FontAwesome } from '@expo/vector-icons';
@@ -35,12 +38,17 @@ const switchNavigator = createSwitchNavigator({
     taskListFlow: createStackNavigator({
       TaskList: TaskListScreen,
       TaskDetail: TaskDetailScreen,
+      CreateTask: CreateTaskScreen,
     }),
     isleListFlow: createStackNavigator({
       IsleList: IsleListScreen,
       IsleDetail: IsleDetailScreen,
     }),
-    Account: AccountScreen,
+    accountFlow: createStackNavigator({
+      Account: AccountScreen,
+      TruckList : TruckListScreen,
+      DriverList: DriverListScreen,
+    })
   },{
     tabBarOptions:{
       inactiveTintColor: 'grey',

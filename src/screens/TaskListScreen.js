@@ -12,13 +12,12 @@ const TaskListScreen = ({ navigation }) => {
     
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <NavigationEvents onWillFocus={loadTask}/>
+            <NavigationEvents onDidFocus={loadTask}/>
             <HeaderComponent
                 headerTitle='Lista Recuperi'
                 iconName='plus'
-                onPress={() => {}}
+                onPress={() => {navigation.navigate('CreateTask')}}
             />
-            <Button title='Completate' onPress={loadCompletedTask} buttonStyle={{backgroundColor: 'lightgrey'}}/>
             <FlatList
                 data={state.task}
                 keyExtractor={(item) => item.id.toString()}
@@ -34,7 +33,12 @@ const TaskListScreen = ({ navigation }) => {
                             <Text style={styles.city}>Ora : {item.hour}</Text>
                             <Text style={styles.city}>Cliente : {item.Isle.client}</Text>
                             <Text style={styles.city}>Tipologia Rifiuti : {item.wasteType}</Text>
-
+                            {item.User ==  null ? 
+                            <Text style={styles.city}>Operatore non Assegnato</Text>
+                            :
+                            <Text style={styles.city}>Operatore : {item.User.firstName} {item.User.lastName}</Text>
+                            }
+                            
 
                         </TouchableOpacity>
                     );
@@ -52,7 +56,6 @@ TaskListScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     container: {
-        height: 148,
         borderWidth: 2,
         margin: 5,
         borderRadius: 8,
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
     },
     city: {
         fontWeight: "bold",
-        marginVertical: 2
+        marginVertical: 3
     }
 });
 

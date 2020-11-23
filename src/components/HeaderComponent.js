@@ -13,7 +13,7 @@ const HeaderComponent = ({ headerTitle ,iconName , onPress}) => {
                 backgroundColor={colors.primary}
                 containerStyle={{ 
                     paddingHorizontal: 15, 
-                    height: 94 
+                    height: 90 
                 }}
                 leftComponent={
                     <HeaderLogo />

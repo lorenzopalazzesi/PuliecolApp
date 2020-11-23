@@ -8,16 +8,23 @@ const processReducer = (state , action) => {
         case 'load_task':
             return{...state , task : action.payload};
         case 'load_completed_task':
-            return{...state , task: action.payload}
+            return{...state , task: action.payload};
+        case 'load_vehicle':
+            return{...state , vehicle: action.payload};
+        case 'load_isle':
+            return{...state , isle: action.payload};
+        case 'search_isle':
+            return{...state , isle: state.isle.filter(item => item.city == action.payload)};
         default: 
             return state;
     }
 }
+
 // Chiamata per restituire tutte le task all' Admin
 const loadTask = dispatch => async () =>{
     try{
         const response = await puliecolServer.get('/tasks');
-        console.log('Reloading Tasks');
+        console.log('-----> Caricamento dati Task');
         dispatch({type: 'load_task' , payload: response.data});
         
     }catch(err){
@@ -25,6 +32,8 @@ const loadTask = dispatch => async () =>{
     };
 };
 
+
+// Chiamata per restituire tutte le task completate 
 const loadCompletedTask = dispatch => async() => {
     try{
         const response = await puliecolServer.get('/tasks/completed');
@@ -32,16 +41,53 @@ const loadCompletedTask = dispatch => async() => {
         navigate('mainFlow')
     }catch(err){
         console.log(err);
+    };
+};
+
+// Chiamata per restituire tutte i mezzi
+const loadVehicle = dispatch => async() => {
+    try{
+         const response = await puliecolServer.get('/vehicles');
+        dispatch({type: 'load_vehicle' , payload: response.data});
+        console.log('-----> Caricamento dati Veicoli');
+    }catch(err){
+        console.log(err)
     }
+}
+// Chiamata per restituire tutte le isole ecologiche
+const loadIsle = dispatch => async() => {
+    try{
+        const response = await puliecolServer.get('/isles');
+        console.log('-----> Caricamento dati Isole Ecologiche');
+        dispatch({type: 'load_isle' , payload: response.data});
+    }catch(err){
+        console.log(err);
+    };
+};
+
+const searchSpecificIsle = dispatch => async({textSearch}) =>{
+    if(textSearch == ''){
+        const response = await puliecolServer.get('/isles');
+        console.log('-----> Caricamento dati Isole Ecologiche');
+        dispatch({type: 'load_isle' , payload: response.data});
+    }else{
+        dispatch({type: 'search_isle' , payload: textSearch.toUpperCase() });
+    }
+    
 }
 
 export const { Provider , Context } = createDataContext(
     processReducer,
     {
         loadTask,
-        loadCompletedTask
+        loadCompletedTask,
+        loadVehicle,
+        loadIsle,
+        searchSpecificIsle
     },
     {
-        task: []
+        task: [],
+        vehicle: [],
+        isle: [],
     }
 )
