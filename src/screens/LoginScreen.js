@@ -1,10 +1,11 @@
-import React , {useContext} from 'react'
+import React , {useContext}from 'react'
 import { StyleSheet ,SafeAreaView } from 'react-native'
 import {colors} from '../constants/color';
 import AuthForm from '../components/AuthForm';
 import {Context as AuthContext} from '../context/AuthContext';
 
-const LoginScreen = ({ navigation }) => {
+
+const LoginScreen = ({ navigation , onSubmit}) => {
     const {state , signin} = useContext(AuthContext);
     return (
         <SafeAreaView style={styles.container}>

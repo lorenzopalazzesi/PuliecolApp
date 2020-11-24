@@ -58,7 +58,7 @@ const AccountScreen = ({ navigation }) => {
 
 AccountScreen.navigationOptions = () => {
     return {
-        headerShown: false
+        headerShown: false,
     };
 };
 

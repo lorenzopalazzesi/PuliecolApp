@@ -65,6 +65,7 @@ const loadIsle = dispatch => async() => {
     };
 };
 
+// Chiamata per filtrare le isole ecologiche ( Ricerca )
 const searchSpecificIsle = dispatch => async({textSearch}) =>{
     if(textSearch == ''){
         const response = await puliecolServer.get('/isles');

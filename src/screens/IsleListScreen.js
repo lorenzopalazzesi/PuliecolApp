@@ -66,9 +66,7 @@ const IsleListScreen = () => {
 IsleListScreen.navigationOptions = () => {
     return {
         headerShown: false,
-        tabBarIcon: () => {
-            <FontAwesome name="tasks" size={24} color="black" />
-        }
+        tabBarLabel: 'Recuperi'
     }
 }
 

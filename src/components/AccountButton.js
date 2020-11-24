@@ -17,10 +17,9 @@ const AccountButton = ({navigation, title , routeName}) => {
 
 const styles = StyleSheet.create({
     container:{
-        marginHorizontal: 10,
-        marginVertical:5,
     },
     buttonStyle:{
+        margin: 5,
         backgroundColor:'lightgrey',
         height: 50,
         borderRadius: 7
