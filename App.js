@@ -14,6 +14,8 @@ import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import TruckListScreen from './src/screens/TruckListScreen';
 import DriverListScreen from './src/screens/DriverListScreen';
 import CreateTaskScreen from './src/screens/CreateTaskScreen';
+import AnnounceListScreen from './src/screens/AnnounceListScreen';
+import AnnounceDetailScreen from './src/screens/AnnounceDetailScreen';
 // Colors
 import { colors } from './src/constants/color';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -23,6 +25,9 @@ import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ProcessProvider } from './src/context/ProcessContext';
 
 import { setNavigator } from './src/navigationRef';
+import TaskListDriverScreen from './src/screens/TaskListDriverScreen';
+import CreateAnnounceScreen from './src/screens/CreateAnnounceScreen';
+
 
 
 
@@ -48,18 +53,27 @@ const switchNavigator = createSwitchNavigator({
         )
       })
     }),
-    isleListFlow: createStackNavigator({
-      IsleList: IsleListScreen,
-      IsleDetail: IsleDetailScreen,
+    announceListFlow: createStackNavigator({
+      AnnounceList: AnnounceListScreen,
+      CreateAnnounce : CreateAnnounceScreen,
+      AnnounceDetail: AnnounceDetailScreen
     }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
-          <Entypo name="megaphone" size={28} color={tintColor} />
+          <Entypo name="megaphone" size={28} color= {tintColor} />
         )
       })
     }),
     accountFlow: createStackNavigator({
       Account: AccountScreen,
+      isleListFlow: createStackNavigator({
+        IsleList: IsleListScreen,
+        IsleDetail: IsleDetailScreen,
+      }, {
+        navigationOptions: {
+          headerShown: false
+        }
+      }),
       TruckList: TruckListScreen,
       DriverList: DriverListScreen,
     }, {
@@ -85,13 +99,55 @@ const switchNavigator = createSwitchNavigator({
 
   //Flusso di navigazione che si attiva autenticandosi come DRIVER
   mainFlowDriver: createBottomTabNavigator({
+    taskListFlow: createStackNavigator({
+      TaskListDriver: TaskListDriverScreen
+    },{
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome5 name="tasks" size={28} color={tintColor} />
+        )
+      })
+    }),
     isleListFlow: createStackNavigator({
       IsleList: IsleListScreen,
       IsleDetail: IsleDetailScreen,
+    },{
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome5 name="road" size={24} color={tintColor} />
+        )
+      })
     }),
-    Account: AccountScreen,
+    announceListFlow: createStackNavigator({
+      AnnounceList: AnnounceListScreen,
+      AnnounceDetail: AnnounceDetailScreen
+    }, {
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <Entypo name="megaphone" size={28} color= {tintColor} />
+        )
+      })
+    }),
+    Account: {
+      screen: AccountScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome5 name="user" size={28} color= {tintColor} />
+        )
+      })
+    }
+  },{
+    tabBarOptions: {
+      showLabel: false,
+      inactiveTintColor: 'lightgrey',
+      activeTintColor: 'white',
+      style: {
+        alignItems: "flex-end",
+        backgroundColor: colors.primary,
+        overflow: "hidden"
+      }
+    }
   })
-  //Da aggiungere un altro flow secondo me ( mainFlow Admin) che mostrerà schermate in piu all 'admin
 });
 
 const App = createAppContainer(switchNavigator);

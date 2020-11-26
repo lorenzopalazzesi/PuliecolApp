@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MapView } from "expo";
-import { View, Text, StyleSheet, Picker  } from "react-native";
+import { View, Text, StyleSheet  } from "react-native";
 import HeaderComponent from "../components/HeaderComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, Input, } from "react-native-elements";
