@@ -1,88 +1,128 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Button, Input , Text } from 'react-native-elements';
-import { Feather } from '@expo/vector-icons'; 
-import {colors} from '../constants/color';
-import Spacer from '../components/Spacer';
+import { Image, StyleSheet } from 'react-native';
+import { Button, Input, Text } from 'react-native-elements';
+import { Feather } from '@expo/vector-icons';
+import { colors } from '../constants/color';
+import { View } from 'react-native-animatable';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 const AuthForm = ({ headerText, errorMessage, onSubmit, onSubmitText }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     return (
-        <>
-            <Spacer>
-                <Text style={styles.headerText}>{headerText}</Text>
-            </Spacer>
-            <Spacer>
+        <View style={styles.container}>
+            <Image
+                source={require('../../assets/puliecol-logo-complete.png')}
+                style={styles.image}
+            />
+
+            <View style={styles.containerForm} animation='fadeIn'>
+                <Text style={{
+                    marginBottom: wp(10.5),
+                    marginTop: wp(10.5),
+                    textAlign: "center",
+                    fontSize: hp(3),
+                    fontWeight: "bold",
+                    color: colors.primary
+                }}>Accedi al servizio</Text>
                 <Input
                     placeholder="Username"
                     value={username}
                     onChangeText={setUsername}
-                    placeholderTextColor='black'
+                    placeholderTextColor='lightgrey'
                     autoCorrect={false}
                     autoCapitalize={"none"}
                     leftIcon={
-                        <Feather 
-                            name="user" 
-                            style={styles.icon} 
+                        <Feather
+                            name="user"
+                            style={styles.icon}
                         />
                     }
                 />
-            </Spacer>
-            <Spacer>
                 <Input
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
-                    placeholderTextColor='black'
+                    placeholderTextColor='lightgrey'
                     autoCorrect={false}
                     autoCapitalize={"none"}
                     leftIcon={
-                        <Feather 
+                        <Feather
                             name="key"
                             style={styles.icon}
                         />
                     }
                 />
-            </Spacer>
-            <Spacer>
                 <Button
                     title={onSubmitText}
                     onPress={() => onSubmit({ username, password })}
                     buttonStyle={styles.button}
                     titleStyle={styles.button}
+                    style={{ marginVertical: hp(2) }}
                 />
-            </Spacer>
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-        </>
+                <Text style={styles.errorMessage}>{errorMessage}</Text>
+            </View>
+
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginVertical: hp(3) }}>
+                <Text style={styles.unicamText}>POWERED BY UNICAM</Text>
+                <Image
+                    source={require('../../assets/logo-unicam.png')}
+                    style={{ height: hp(5), width: wp(10), resizeMode: "contain" }}
+                />
+            </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    headerText: {
-        textAlign: "center",
-        fontSize: 38,
-        marginTop: 40,
-        color: 'black'
+    container: {
+        flex: 1
     },
-    icon:{
+    containerForm: {
+        backgroundColor: 'white',
+        marginHorizontal: wp(3.5),
+        borderRadius: 20,
+        elevation: 10,
+        paddingHorizontal: wp(6),
+        paddingBottom: wp(10)
+    },
+    image: {
+        height: hp(15),
+        borderRadius: 100,
+        overflow: 'hidden',
+        marginVertical: hp(3.5),
+        alignSelf: "center",
+        resizeMode: 'contain'
+    },
+    icon: {
         fontSize: 26,
         marginRight: 8,
+        color: 'lightgrey'
     },
-    errorMessage:{
+    errorMessage: {
         textAlign: "center",
-        color:'red',
-        fontSize: 16,
+        color: 'red',
+        marginVertical: hp(2),
+        fontSize: hp(2),
         fontWeight: "bold"
     },
     button: {
-        backgroundColor: 'black',
-        color: colors.primary,
-        fontSize: 22,
-        fontWeight: "bold"
+        backgroundColor: colors.primary,
+        color: 'white',
+        borderRadius: 10,
+        fontSize: hp(2.5),
+        fontWeight: "bold",
     },
+    unicamText: {
+        fontSize: hp(2),
+        color: 'lightgrey',
+        fontWeight: "bold"
+    }
 });
 
 export default AuthForm;

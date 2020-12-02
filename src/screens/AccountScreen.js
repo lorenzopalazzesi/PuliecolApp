@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View , Linking } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { colors } from '../constants/color';
 //Component
 import HeaderComponent from '../components/HeaderComponent';
@@ -10,6 +10,20 @@ import AccountButton from '../components/AccountButton';
 import { FontAwesome5 } from '@expo/vector-icons';
 //Context
 import { Context as AuthContext } from '../context/AuthContext';
+
+// Funzione per la richiesta di assistenza mediante chiamata da pare del Driver
+const makeCall = () => {
+
+    let phoneNumber = '0733 645643';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${0733 645643}';
+    } else {
+      phoneNumber = 'telprompt:${0733 645643}';
+    }
+
+    Linking.openURL(phoneNumber);
+  }
 
 const AccountScreen = ({ navigation }) => {
     const { state, signout } = useContext(AuthContext);
@@ -36,7 +50,7 @@ const AccountScreen = ({ navigation }) => {
 
                 {state.user.role == 'ADMIN' ?
                     <View >
-                        <AccountButton 
+                        <AccountButton
                             title='Isole Ecologiche'
                             routeName='isleListFlow'
                         />
@@ -53,7 +67,17 @@ const AccountScreen = ({ navigation }) => {
                     </View>
 
                     :
-                    <Text style={{ textAlign: "center" }}>Non sei un amministratore , azioni rapide ancora non disponibili</Text>
+                    <View>
+                        <AccountButton
+                            title={`Come usare l'applicazione`}
+                        />
+                        <TouchableOpacity onPress={() => makeCall()}>
+                            <AccountButton
+                                title={`Richiedi Assistenza`}
+                            />
+                        </TouchableOpacity>
+
+                    </View>
                 }
             </ScrollView>
         </View>

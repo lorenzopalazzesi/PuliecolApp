@@ -10,6 +10,7 @@ import { Context as ProcessContext } from "../context/ProcessContext";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import TaskDetail from "../components/TaskDetail";
 import { colors } from "../constants/color";
+import TaskDetailStatus from "../components/TaskDetailStatus";
 
 
 const TaskDetailScreen = ({ navigation }) => {
@@ -27,26 +28,12 @@ const TaskDetailScreen = ({ navigation }) => {
         onPress={() => navigation.goBack()}
       />
       <ScrollView>
-        <View style={{ borderBottomWidth: 1.5, borderBottomColor: 'lightgrey', flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 15 }}>
-          <Text style={styles.statusTitle}>STATO ATTUALE</Text>
-          {specificTask.completed == true ?
-            <Badge status='success' value={<Text></Text>} /> :
-            <Badge status='error' value={<Text></Text>} />
-          }
+        <TaskDetailStatus status={specificTask.completed}/>
+        <View style={styles.infoContainer}>
+          {specificTask.type === 'IN' ? <Text style={styles.taskType}>RECUPERO IN ENTRATA</Text> : <Text style={styles.taskType}>RECUPERO IN USCITA</Text>}
+        
         </View>
-        <TaskDetail
-          iconName='map-marker-alt'
-          title='Città'
-          text={specificTask.Isle.city}
-        />
-        <TaskDetail
-          iconName='industry'
-          title='Azienda'
-          text={specificTask.Isle.fir}
-        />
-        <TouchableOpacity style={styles.openInMapButton}>
-            <Text>Apri in Mappe</Text>
-        </TouchableOpacity>
+
       </ScrollView>
     </View>
   );
@@ -59,18 +46,16 @@ TaskDetailScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
-  statusTitle: {
+  
+  taskType:{
     fontWeight: "bold",
-    color: 'lightgrey',
-    fontSize: 16
+    color: colors.primary,
+    fontSize: 20
   },
-  openInMapButton:{
-    backgroundColor: colors.primary,
-    justifyContent: "center",
+  infoContainer:{
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     alignItems: "center",
-    padding: 10,
-    margin: 10,
-    borderRadius: 6
   }
 
 });

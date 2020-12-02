@@ -9,7 +9,7 @@ const TaskDetail = ({ iconName, title, text }) => {
         <View style={styles.line}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <FontAwesome5 name={iconName} size={24} color={colors.primary} />
-                <Text style={{ marginLeft: 10, fontSize: 25, color: colors.primary, fontWeight: "bold" }} >{title}</Text>
+                <Text style={{ marginLeft: 10, fontSize: 18, color: colors.primary, fontWeight: "bold" }} >{title}</Text>
             </View>
             <Text>{text}</Text>
         </View>

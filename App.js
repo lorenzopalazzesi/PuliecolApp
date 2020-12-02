@@ -3,6 +3,8 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+// NavigationRef
+import { setNavigator } from './src/navigationRef';
 //Screens
 import AccountScreen from './src/screens/AccountScreen';
 import IsleDetailScreen from './src/screens/IsleDetailScreen';
@@ -16,18 +18,17 @@ import DriverListScreen from './src/screens/DriverListScreen';
 import CreateTaskScreen from './src/screens/CreateTaskScreen';
 import AnnounceListScreen from './src/screens/AnnounceListScreen';
 import AnnounceDetailScreen from './src/screens/AnnounceDetailScreen';
+import TaskListDriverScreen from './src/screens/TaskListDriverScreen';
+import CreateAnnounceScreen from './src/screens/CreateAnnounceScreen';
+import TaskDetailDriverScreen from './src/screens/TaskDetailDriverScreen';
+import AnnounceListDriverScreen from './src/screens/AnnounceListDriverScreen';
 // Colors
 import { colors } from './src/constants/color';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-
+// Context Provider
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ProcessProvider } from './src/context/ProcessContext';
-
-import { setNavigator } from './src/navigationRef';
-import TaskListDriverScreen from './src/screens/TaskListDriverScreen';
-import CreateAnnounceScreen from './src/screens/CreateAnnounceScreen';
-
 
 
 
@@ -100,7 +101,8 @@ const switchNavigator = createSwitchNavigator({
   //Flusso di navigazione che si attiva autenticandosi come DRIVER
   mainFlowDriver: createBottomTabNavigator({
     taskListFlow: createStackNavigator({
-      TaskListDriver: TaskListDriverScreen
+      TaskListDriver: TaskListDriverScreen,
+      TaskDetailDriver: TaskDetailDriverScreen
     },{
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
@@ -119,8 +121,7 @@ const switchNavigator = createSwitchNavigator({
       })
     }),
     announceListFlow: createStackNavigator({
-      AnnounceList: AnnounceListScreen,
-      AnnounceDetail: AnnounceDetailScreen
+      AnnounceListDriver: AnnounceListDriverScreen,
     }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (

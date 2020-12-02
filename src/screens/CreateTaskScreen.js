@@ -1,25 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { MapView } from "expo";
-import { View, Text, StyleSheet  } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import HeaderComponent from "../components/HeaderComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, Input, } from "react-native-elements";
-import DatePicker from 'react-native-datepicker';
+import { Button, Input } from "react-native-elements";
+import DatePicker from "react-native-datepicker";
+import RNPickerSelect from "react-native-picker-select";
+import { Context as ProcessContext } from "../context/ProcessContext";
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
 const CreateTaskScreen = ({ navigation, onSubmit }) => {
+  const { state, loadIsle, searchSpecificIsle } = useContext(ProcessContext);
+
   const [Data, setData] = useState();
   const [Orario, setOrario] = useState();
   const [Isola, setIsola] = useState("");
   const [Materiale, setMateriale] = useState("R1");
   const [TipoTask, setTipoTask] = useState("IN");
-  const [Driver, setDriver] = useState("");
+  //const [Driver, setDriver] = useState("");
   const [Note, setNote] = useState("");
-
-  console.log({Driver})
+  console.log({loadIsle});
   return (
     <View style={styles.GlobalViewStyle}>
       <HeaderComponent
@@ -28,81 +32,58 @@ const CreateTaskScreen = ({ navigation, onSubmit }) => {
         onPress={() => navigation.goBack()}
       />
 
-      <View style={styles.ViewInputStyle}>
-      <DatePicker
-          style={styles.datePickerStyle}
-          date={Data} // Initial date from state
-          mode="date" // The enum of date, datetime and time
-          placeholder="select date"
-          format="DD-MM-YYYY"
-          minDate="01-01-2020"
-          maxDate="01-01-2028"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              //display: 'none',
-              position: 'absolute',
-              left: 0,
-              top: 4,
-              marginLeft: 0,
-            },
-            dateInput: {
-              marginLeft: 36,
-            },
-          }}
-          onDateChange={(date) => {
-            setDate(date);
-          }}
-        />
-        <Picker
-           
-          >
-        
-          <Picker.Item label="isola1" value=""/>
-          <Picker.Item label="isola2" value="" />
-        </Picker>
+      <Input
+        placeholder="Data"
+        value={Data}
+        onChangeText={setData}
+        placeholderTextColor="lightgrey"
+        autoCorrect={false}
+        autoCapitalize={"none"}
+      />
+      <Input
+        placeholder="Orario"
+        value={Orario}
+        onChangeText={setOrario}
+        placeholderTextColor="lightgrey"
+        autoCorrect={false}
+        autoCapitalize={"none"}
+      />
+      <Input
+        placeholder="IN o 0UT"
+        value={TipoTask}
+        onChangeText={setTipoTask}
+        placeholderTextColor="lightgrey"
+        autoCorrect={false}
+        autoCapitalize={"none"}
+      />
+      <Input
+        placeholder="Note"
+        value={Note}
+        onChangeText={setNote}
+        placeholderTextColor="lightgrey"
+        autoCorrect={false}
+        autoCapitalize={"none"}
+      />
 
-        <Picker>
-          <Picker.Item label="materiale" value="" />
-          <Picker.Item label="materiale" value="" />
-        </Picker>
+      <RNPickerSelect
+        onValueChange={(value) => setMateriale(value)}
+        style={styles.RNPickerSelect}
+        placeholder={{
+          label: "Seleziona la priorità tipo materiale",
+        }}
+        items={[
+          { label: "R1" },
+          { label: "R2" },
+          { label: "R3" },
+          { label: "R4" },
+          { label: "R5" },
+          { label: "R6" },
+        ]}
+      ></RNPickerSelect>
 
-        <Picker>
-          <Picker.Item label="IN" value="" />
-          <Picker.Item label="OUT" value="" />
-        </Picker>
-
-        <Picker>
-          <Picker.Item label="Driver1" value="" />
-          <Picker.Item label="Driver2" value="" />
-        </Picker>
-        <Input
-          placeholder="Data"
-          leftIcon={{ type: "font-awesome", name: "clock-o" }}
-          style={styles.InputStyle}
-          value={Data}
-          onChangeText={setData}
-          autoCorrect={false}
-        />
-       
-        <Input
-          placeholder="Note"
-          leftIcon={{ type: "font-awesome", name: "comment" }}
-          style={styles.InputStyle}
-          value={Note}
-          onChangeText={setNote}
-        />
-        <Button
-          title="Inserisci Task"
-          style={styles.buttonStyle}
-          titleStyle={styles.TextbuttonStyle}
-          onPress={() =>
-            onSubmit({ Data, Isola, Materiale, TipoTask, Driver, Note })
-          }
-        ></Button>
-      </View>
+    
     </View>
+    
   );
 };
 
@@ -116,6 +97,7 @@ const styles = StyleSheet.create({
   GlobalViewStyle: {
     flex: 1,
   },
+  RNPickerSelect: {},
   ViewInputStyle: {
     paddingHorizontal: wp(5),
     justifyContent: "center",
@@ -124,7 +106,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(1),
   },
   buttonStyle: {},
-  TextbuttonStyle: {},
 });
 
 export default CreateTaskScreen;

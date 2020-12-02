@@ -33,7 +33,7 @@ const processReducer = (state, action) => {
 const loadTask = dispatch => async () => {
     try {
         const response = await puliecolServer.get('/tasks');
-        console.log('-----> Caricamento dati Task');
+        console.log('-----> Caricamento dati Task lato Admin');
         dispatch({ type: 'load_task', payload: response.data });
 
     } catch (err) {
@@ -44,7 +44,7 @@ const loadTask = dispatch => async () => {
 const loadTaskDriver = dispatch => async ({ id }) => {
     try {
         const response = await puliecolServer.get('/tasks');
-        console.log('-----> Caricamento task Driver')
+        console.log('-----> Caricamento dati task lato Driver')
         dispatch({ type: 'load_task_driver', payload: response.data.filter((item) => item.UserId == id) })
     } catch (err) {
         console.log(err);
@@ -109,6 +109,7 @@ const searchSpecificIsle = dispatch => async ({ textSearch }) => {
 const loadAnnounce = dispatch => async() => {
     try{
         const response = await puliecolServer.get('/announces');
+        console.log('-----> Caricamento annunci lato Admin')
         dispatch({type: 'load_announce' , payload: response.data});
     }catch(err){
 
