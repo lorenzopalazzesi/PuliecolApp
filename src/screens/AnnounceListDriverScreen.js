@@ -6,10 +6,10 @@ import HeaderComponent from '../components/HeaderComponent';
 import { colors } from '../constants/color';
 import { Context as ProcessContext } from '../context/ProcessContext';
 const AnnounceListDriverScreen = ({ navigation }) => {
-    const { state, loadAnnounce } = useContext(ProcessContext);
+    const { state, loadAnnounceDriver } = useContext(ProcessContext);
     return (
         <>
-            <NavigationEvents onDidFocus={loadAnnounce} />
+            <NavigationEvents onDidFocus={loadAnnounceDriver} />
             <HeaderComponent
                 headerTitle='Annunci'
             />
@@ -28,7 +28,7 @@ const AnnounceListDriverScreen = ({ navigation }) => {
                             return (
                                 <View style={styles.containerAnnounce}>
                                     <View>
-                                        {item.priority == 'DANGER' ? <Text style={{ color: 'red', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO AD ALTA PRIORITA'</Text> : (item.priority == 'WARNING' ? <Text style={{ color: colors.primary, fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO CON PRIORITA' CONTENUTA</Text> : <Text style={{ color: 'limegreen', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO A BASSA PRIORITA'</Text>)}
+                                        {item.priority == 'DANGER' || item.priority == 'danger' ? <Text style={{ color: 'red', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO AD ALTA PRIORITA'</Text> : (item.priority == 'WARNING' || item.priority == 'warning' ? <Text style={{ color: colors.primary, fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO CON PRIORITA' CONTENUTA</Text> : <Text style={{ color: 'limegreen', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO A BASSA PRIORITA'</Text>)}
                                     </View>
                                     <Text style={styles.announceCreator}>Inserito da {item.User.firstName} {item.User.lastName}</Text>
                                     <Text style={styles.message}>{item.message}</Text>

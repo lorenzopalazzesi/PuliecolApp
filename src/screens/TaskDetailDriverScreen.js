@@ -1,13 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet, Text, Al, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { NavigationEvents } from 'react-navigation';
 import HeaderComponent from '../components/HeaderComponent';
 import TaskDetailStatus from '../components/TaskDetailStatus';
+import TaskDetailData from '../components/TaskDetailData';
 import { colors } from '../constants/color';
 import { Context as ProcessContext } from '../context/ProcessContext';
 import MapView, { Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
+import { NavigationEvents } from 'react-navigation';
+import puliecolServer from "../api/puliecolServer";
 
 
 const TaskDetailDriverScreen = ({ navigation }) => {
@@ -19,20 +21,39 @@ const TaskDetailDriverScreen = ({ navigation }) => {
         longitude: null,
     });
 
-    // const getMyPosition = () => {
-    //     window.navigator.geolocation.getCurrentPosition(
-    //         (position) => {
-    //             setMyPosition({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-    //         },
-    //         (err) => {
-    //             console.log(err);
-    //         },
-    //     )
-    // }
+    const getMyPosition = () => {
+        window.navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setMyPosition({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+            },
+            (err) => {
+                console.log(err);
+            },
+        )
+    }
+
+    const addPosition = async ({ id, latitude, longitude }) => {
+        try {
+            Alert.alert(
+                'Inserimento Posizione',
+                "Stai inserendo una nuova posizione per l'isola Ecologica , assicurati di trovarti nel posto giusto!",
+                [
+                    {text: "Annulla"},
+                    {text: 'Inserisci' , onPress : async () => {
+                        await puliecolServer.put(`/isles/${id}`, { latitude, longitude });
+                        navigation.goBack();
+                    }}
+                ]
+            )
+            
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <>
-            {/* <NavigationEvents onDidFocus={getMyPosition} /> */}
+            <NavigationEvents onDidFocus={getMyPosition} />
             <HeaderComponent
                 headerTitle='Dettagli Recupero'
                 iconName='close'
@@ -42,39 +63,58 @@ const TaskDetailDriverScreen = ({ navigation }) => {
             {myPosition.longitude || myPosition.latitude == null ?
                 <ScrollView>
                     <TaskDetailStatus status={specificTask.completed} />
-                    <Text>Città Del Recupero : </Text>
-                    <View style={styles.containerMaps}>
-                        <MapView
-                            style={styles.mapStyle}
-                            initialRegion={{
-                                latitude: 43.311570,
-                                longitude: 13.312520,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }}
-                            onPress={() => Alert.alert(
-                                'Avvio calcolo Itinerario',
-                                'Sei sicuro di voler avviare la navigazione?',
-                                [
-                                    { text: 'Annulla' },
-                                    {
-                                        text: 'Avvia',
-                                        onPress: () => { openMap({ start: '', end: `${specificTask.Isle.city.toLowerCase()}` }) }
-                                    }
-                                ]
-                            )}
-                        >
-                            <Marker
-                                coordinate={{
-                                    latitude: 43.311570,
-                                    longitude: 13.312520,
+                    <View style={{ height: 5 }} />
+                    <TaskDetailData title='Citta del recupero' text={specificTask.Isle.city} />
+                    <TaskDetailData title='Cliente' text={specificTask.Isle.fir} />
+                    <TaskDetailData title='Tipologia Rifiuto' text={specificTask.wasteType} />
+                    <TaskDetailData title='Ora' text={specificTask.date} />
+                    <TaskDetailData title='Giorno' text={'GIORNATA ODIERNA'} />
+
+                    {specificTask.Isle.latitude === null || specificTask.Isle.longitude === null ?
+                        <TouchableOpacity onPress={() => addPosition({ id: specificTask.Isle.id, latitude: myPosition.latitude, longitude: myPosition.longitude })} style={styles.buttonInserisci}>
+                            <Text style={{ textAlign: "center", color: 'white', fontWeight: "bold", fontSize: 18 }}> Inserisci Posizione</Text>
+
+                        </TouchableOpacity>
+
+                        :
+                        <>
+                        <View style={styles.containerMaps}>
+                            <MapView
+                                style={styles.mapStyle}
+                                initialRegion={{
+                                    latitude: Number(specificTask.Isle.latitude) ,
+                                    longitude: Number(specificTask.Isle.longitude),
                                     latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421
+                                    longitudeDelta: 0.0421,
                                 }}
-                                title={'Isola di ' + specificTask.Isle.city} />
-                        </MapView>
-                    </View>
-                    <Text style={{marginHorizontal: 20 , textAlign: "center"}}>Clicca sulla mappa per avviare il calcolo dell'Itinerario...</Text>
+                                onPress={() => Alert.alert(
+                                    'Avvio calcolo Itinerario',
+                                    'Sei sicuro di voler avviare la navigazione?',
+                                    [
+                                        { text: 'Annulla' },
+                                        {
+                                            text: 'Avvia',
+                                            onPress: () => { openMap({ start: '', end: `${specificTask.Isle.city.toLowerCase()}` }) }
+                                        }
+                                    ]
+                                )}
+                            >
+                                <Marker
+                                    coordinate={{
+                                        latitude: Number(specificTask.Isle.latitude),
+                                        longitude: Number(specificTask.Isle.longitude),
+                                        latitudeDelta: 0.0922,
+                                        longitudeDelta: 0.0421,
+                                    }}
+                                    title={'Isola di ' + specificTask.Isle.city} />
+                            </MapView>
+                        </View>
+                        <TouchableOpacity onPress={() => addPosition({ id: specificTask.Isle.id, latitude: myPosition.latitude, longitude: myPosition.longitude })} style={styles.buttonReinserisci}>
+                            <Text style={{ textAlign: "center", color: 'white', fontWeight: "bold", fontSize: 18 }}> Riassegna Posizione</Text>
+
+                        </TouchableOpacity>
+                        </>
+                    }
                 </ScrollView>
 
                 :
@@ -102,10 +142,29 @@ const styles = StyleSheet.create({
         borderRadius: 6
     },
     mapStyle: {
-        height: 250,
+        height: 300,
         borderRadius: 6,
         overflow: "hidden"
+    },
+    buttonInserisci: {
+        justifyContent: "center",
+        backgroundColor: colors.primary,
+        padding: 10,
+        marginTop: 20,
+        marginHorizontal: 15,
+        marginBottom: 10,
+        borderRadius: 6
+    },
+    buttonReinserisci: {
+        justifyContent: "center",
+        backgroundColor: colors.primary,
+        padding: 10,
+        marginTop: 10,
+        marginHorizontal: 15,
+        marginBottom: 10,
+        borderRadius: 6
     }
+
 });
 
 export default TaskDetailDriverScreen;

@@ -50,6 +50,7 @@ const AccountScreen = ({ navigation }) => {
 
                 {state.user.role == 'ADMIN' ?
                     <View >
+                        <AccountButton title="Come usare l'Applicazione" />
                         <AccountButton
                             title='Isole Ecologiche'
                             routeName='isleListFlow'
@@ -61,9 +62,7 @@ const AccountScreen = ({ navigation }) => {
                             title='Info Mezzi'
                             routeName='TruckList'
                         />
-                        <AccountButton title='Inserisci Mezzo' />
-                        <AccountButton title='Inserisci Dipendente' />
-                        <AccountButton title='Aggiorna Profilo' />
+                        
                     </View>
 
                     :

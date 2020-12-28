@@ -28,8 +28,10 @@ const signin = (dispatch) => async({username , password}) => {
         console.log('Accesso effettuato con il Token: ' + response.data.token + ' ' + responseRole.data.role);
         if(responseRole.data.role == 'ADMIN') {
             navigate('mainFlow');
-        }else if(responseRole.data.role != 'ADMIN'){
+        }else if(responseRole.data.role == 'DRIVER'){
             navigate('mainFlowDriver');
+        }else if(responseRole.data.role == 'SYSTEM'){
+            navigate('mainFlowSystem')
         }
 
     }catch(err){
@@ -46,8 +48,10 @@ const tryLocalSignin = dispatch => async () => {
             console.log('Accesso Già Effettuato con Token: ' + token + ' ' + responseRole.data.role);
             if(responseRole.data.role == 'ADMIN') {
                 navigate('mainFlow');
-            }else if(responseRole.data.role != 'ADMIN'){
+            }else if(responseRole.data.role == 'DRIVER'){
                 navigate('mainFlowDriver');
+            }else if(responseRole.data.role == 'SYSTEM'){
+                navigate('mainFlowSystem');
             }
         }catch(err){
             console.log(err);

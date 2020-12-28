@@ -22,13 +22,16 @@ import TaskListDriverScreen from './src/screens/TaskListDriverScreen';
 import CreateAnnounceScreen from './src/screens/CreateAnnounceScreen';
 import TaskDetailDriverScreen from './src/screens/TaskDetailDriverScreen';
 import AnnounceListDriverScreen from './src/screens/AnnounceListDriverScreen';
+import SystemScreen from './src/screens/SystemScreen';
 // Colors
 import { colors } from './src/constants/color';
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 // Context Provider
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider as ProcessProvider } from './src/context/ProcessContext';
+
 
 
 
@@ -56,12 +59,12 @@ const switchNavigator = createSwitchNavigator({
     }),
     announceListFlow: createStackNavigator({
       AnnounceList: AnnounceListScreen,
-      CreateAnnounce : CreateAnnounceScreen,
+      CreateAnnounce: CreateAnnounceScreen,
       AnnounceDetail: AnnounceDetailScreen
     }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
-          <Entypo name="megaphone" size={28} color= {tintColor} />
+          <Entypo name="megaphone" size={28} color={tintColor} />
         )
       })
     }),
@@ -103,7 +106,7 @@ const switchNavigator = createSwitchNavigator({
     taskListFlow: createStackNavigator({
       TaskListDriver: TaskListDriverScreen,
       TaskDetailDriver: TaskDetailDriverScreen
-    },{
+    }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
           <FontAwesome5 name="tasks" size={28} color={tintColor} />
@@ -113,7 +116,7 @@ const switchNavigator = createSwitchNavigator({
     isleListFlow: createStackNavigator({
       IsleList: IsleListScreen,
       IsleDetail: IsleDetailScreen,
-    },{
+    }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
           <FontAwesome5 name="road" size={24} color={tintColor} />
@@ -125,7 +128,7 @@ const switchNavigator = createSwitchNavigator({
     }, {
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
-          <Entypo name="megaphone" size={28} color= {tintColor} />
+          <Entypo name="megaphone" size={28} color={tintColor} />
         )
       })
     }),
@@ -133,11 +136,42 @@ const switchNavigator = createSwitchNavigator({
       screen: AccountScreen,
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => (
-          <FontAwesome5 name="user" size={28} color= {tintColor} />
+          <FontAwesome5 name="user" size={28} color={tintColor} />
         )
       })
     }
-  },{
+  }, {
+    tabBarOptions: {
+      showLabel: false,
+      inactiveTintColor: 'lightgrey',
+      activeTintColor: 'white',
+      style: {
+        alignItems: "flex-end",
+        backgroundColor: colors.primary,
+        overflow: "hidden"
+      }
+    }
+  }),
+
+  //Flusso che si attiva autenticandosi come System
+  mainFlowSystem: createBottomTabNavigator({
+    System: {
+      screen: SystemScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="ios-notifications" size={36} color={tintColor} />
+        )
+      })
+    },
+    Account: {
+      screen: AccountScreen,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome5 name="user" size={28} color={tintColor} />
+        )
+      })
+    }
+  }, {
     tabBarOptions: {
       showLabel: false,
       inactiveTintColor: 'lightgrey',
