@@ -8,17 +8,22 @@ import { Context as ProcessContext } from '../context/ProcessContext';
 import { Context as AuthContext } from '../context/AuthContext';
 import TaskList from '../components/TaskList';
 
-const TaskListDriverScreen = ({navigation}) => {
+const TaskListDriverScreen = ({ navigation }) => {
     const { state: { user } } = useContext(AuthContext);
     const { state: { task }, loadTaskDriver } = useContext(ProcessContext);
     const id = user.id;
     return (
         <>
-            <NavigationEvents onDidFocus={() => loadTaskDriver({id})} />
+            <NavigationEvents onDidFocus={() => loadTaskDriver({ id })} />
             <HeaderComponent
                 headerTitle='I Miei Recuperi'
             />
             <FlatList
+                ListEmptyComponent={
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: "center" }}>
+                        <Text style={{marginTop: 10 , fontSize:16 , fontWeight: 'bold'}}>Non hai alcun recupero assegnato...</Text>
+                    </View>
+                }
                 data={task}
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
@@ -36,7 +41,7 @@ const TaskListDriverScreen = ({navigation}) => {
                         />
                     );
                 }}
-            /> 
+            />
         </>
     );
 };

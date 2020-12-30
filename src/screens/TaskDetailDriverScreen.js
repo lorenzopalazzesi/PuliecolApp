@@ -38,16 +38,38 @@ const TaskDetailDriverScreen = ({ navigation }) => {
                 'Inserimento Posizione',
                 "Stai inserendo una nuova posizione per l'isola Ecologica , assicurati di trovarti nel posto giusto!",
                 [
-                    {text: "Annulla"},
-                    {text: 'Inserisci' , onPress : async () => {
-                        await puliecolServer.put(`/isles/${id}`, { latitude, longitude });
-                        navigation.goBack();
-                    }}
+                    { text: "Annulla" },
+                    {
+                        text: 'Inserisci', onPress: async () => {
+                            await puliecolServer.put(`/isles/${id}`, { latitude, longitude });
+                            navigation.goBack();
+                        }
+                    }
                 ]
             )
-            
+
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    const setCompleted = async ({ id }) => {
+        try {
+            Alert.alert(
+                'Conferma Completamento',
+                "Stai contrassegnando il recupero come completato. Procedere?",
+                [
+                    { text: "Annulla" },
+                    {
+                        text: 'Procedi', onPress: async () => {
+                            await puliecolServer.put(`/tasks/${id}`, { completed: true });
+                            navigation.goBack();
+                        }
+                    }
+                ]
+            )
+        } catch (err) {
+            alert('Qualcosa è andato storto');
         }
     }
 
@@ -78,43 +100,52 @@ const TaskDetailDriverScreen = ({ navigation }) => {
 
                         :
                         <>
-                        <View style={styles.containerMaps}>
-                            <MapView
-                                style={styles.mapStyle}
-                                initialRegion={{
-                                    latitude: Number(specificTask.Isle.latitude) ,
-                                    longitude: Number(specificTask.Isle.longitude),
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }}
-                                onPress={() => Alert.alert(
-                                    'Avvio calcolo Itinerario',
-                                    'Sei sicuro di voler avviare la navigazione?',
-                                    [
-                                        { text: 'Annulla' },
-                                        {
-                                            text: 'Avvia',
-                                            onPress: () => { openMap({ start: '', end: `${specificTask.Isle.city.toLowerCase()}` }) }
-                                        }
-                                    ]
-                                )}
-                            >
-                                <Marker
-                                    coordinate={{
+                            <View style={styles.containerMaps}>
+                                <MapView
+                                    style={styles.mapStyle}
+                                    initialRegion={{
                                         latitude: Number(specificTask.Isle.latitude),
                                         longitude: Number(specificTask.Isle.longitude),
                                         latitudeDelta: 0.0922,
                                         longitudeDelta: 0.0421,
                                     }}
-                                    title={'Isola di ' + specificTask.Isle.city} />
-                            </MapView>
-                        </View>
-                        <TouchableOpacity onPress={() => addPosition({ id: specificTask.Isle.id, latitude: myPosition.latitude, longitude: myPosition.longitude })} style={styles.buttonReinserisci}>
-                            <Text style={{ textAlign: "center", color: 'white', fontWeight: "bold", fontSize: 18 }}> Riassegna Posizione</Text>
+                                    onPress={() => Alert.alert(
+                                        'Avvio calcolo Itinerario',
+                                        'Sei sicuro di voler avviare la navigazione?',
+                                        [
+                                            { text: 'Annulla' },
+                                            {
+                                                text: 'Avvia',
+                                                onPress: () => { openMap({ start: '', end: `${specificTask.Isle.city.toLowerCase()}` }) }
+                                            }
+                                        ]
+                                    )}
+                                >
+                                    <Marker
+                                        coordinate={{
+                                            latitude: Number(specificTask.Isle.latitude),
+                                            longitude: Number(specificTask.Isle.longitude),
+                                            latitudeDelta: 0.0922,
+                                            longitudeDelta: 0.0421,
+                                        }}
+                                        title={'Isola di ' + specificTask.Isle.city} />
+                                </MapView>
+                            </View>
+                            <TouchableOpacity onPress={() => addPosition({ id: specificTask.Isle.id, latitude: myPosition.latitude, longitude: myPosition.longitude })} style={styles.buttonReinserisci}>
+                                <Text style={{ textAlign: "center", color: 'white', fontWeight: "bold", fontSize: 18 }}> Riassegna Posizione</Text>
 
-                        </TouchableOpacity>
+                            </TouchableOpacity>
                         </>
                     }
+                    {
+                        specificTask.completed === true
+                            ? null
+                            :
+                            <TouchableOpacity onPress={() => setCompleted({ id: specificTask.id })} style={styles.buttonCompletato}>
+                                <Text style={{ textAlign: "center", color: 'white', fontWeight: "bold", fontSize: 18 }}> Contrassegna Completato</Text>
+                            </TouchableOpacity>
+                    }
+
                 </ScrollView>
 
                 :
@@ -160,6 +191,15 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         padding: 10,
         marginTop: 10,
+        marginHorizontal: 15,
+        marginBottom: 10,
+        borderRadius: 6
+    },
+    buttonCompletato: {
+        justifyContent: "center",
+        backgroundColor: 'green',
+        padding: 10,
+        marginTop: 5,
         marginHorizontal: 15,
         marginBottom: 10,
         borderRadius: 6

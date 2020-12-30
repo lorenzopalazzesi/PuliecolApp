@@ -4,26 +4,25 @@ import { colors } from '../constants/color';
 
 const TaskDetailData = ({title , text}) => {
     return (
-        <View style={{ flexDirection: "row", marginVertical: 10, justifyContent: "space-between", alignItems: "center" }}>
+        <View style={{ flexDirection: "column", paddingVertical: 10, paddingHorizontal: 15,  justifyContent: "space-between", alignItems: "flex-start" }}>
             <Text style={styles.infoTitle}>{title} : </Text>
-            <Text style={styles.infoData}> {text} </Text>
+            <Text style={styles.infoData}>{text} </Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     infoTitle:{
-        fontSize: 16,
+        fontSize: 18,
         textTransform: "uppercase",
         color: colors.primary,
         fontWeight: "bold",
-        marginLeft: 15
     },
     infoData:{
         fontSize : 16,
         fontWeight: "bold",
         color: 'grey',
-        marginRight: 15
+        marginTop: 5,
     }
 });
 

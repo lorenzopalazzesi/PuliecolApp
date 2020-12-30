@@ -144,7 +144,7 @@ const loadAnnounce = dispatch => async () => {
 const loadAnnounceDriver = dispatch => async () => {
     try {
         const response = await puliecolServer.get('/announces');
-        console.log('-----> Caricamento annunci lato Admin')
+        console.log('-----> Caricamento annunci lato Driver')
         dispatch({ type: 'load_announce', payload: response.data.filter((item) => item.User.role == 'ADMIN') });
     } catch (err) {
 

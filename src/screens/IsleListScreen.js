@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import HeaderComponent from '../components/HeaderComponent';
-import { FontAwesome } from '@expo/vector-icons';
+import { colors } from '../constants/color';
 import { NavigationEvents } from 'react-navigation';
 import { Context as ProcessContext } from '../context/ProcessContext';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
@@ -37,18 +37,23 @@ const IsleListScreen = () => {
             }
             {state.isle.length == 0 ?
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <Text >Nessuna isola Ecologica Trovata</Text>
+                    <ActivityIndicator size='large' color={colors.primary} />
                 </View>
 
 
                 :
 
                 <FlatList
+                    ListEmptyComponent={
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: "center" }}>
+                            <Text>Nesun Isola Ecologica trovata...</Text>
+                        </View>
+                    }
                     data={state.isle}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between" , margin: 5 , padding: 5 , borderWidth: 1.5 , borderColor:'lightgrey' }}>
+                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", margin: 5, padding: 5, borderWidth: 1.5, borderColor: 'lightgrey' }}>
                                 <Text>{item.id}</Text>
                                 <Text>{item.city}</Text>
                             </TouchableOpacity>

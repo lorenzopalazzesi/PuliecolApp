@@ -1,10 +1,13 @@
+
 import React, { useContext } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import HeaderComponent from '../components/HeaderComponent';
 import { colors } from '../constants/color';
 import { Context as ProcessContext } from '../context/ProcessContext';
+
 const AnnounceListDriverScreen = ({ navigation }) => {
     const { state, loadAnnounceDriver } = useContext(ProcessContext);
     return (
@@ -16,19 +19,26 @@ const AnnounceListDriverScreen = ({ navigation }) => {
             {
                 state.announce.length == 0 ?
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: "center" }}>
-                        <Text>Non sono stati inseriti annunci...</Text>
-                        <Text>Hai qualcosa da comunicare ? Creane subito uno !</Text>
+                        <ActivityIndicator size='large' color={colors.primary} />
                     </View>
 
                     :
+                    
                     <FlatList
+                        ListEmptyComponent={
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: "center" }}>
+                                <Text>Non sono stati inseriti annunci...</Text>
+                            </View>
+                        }
+                        // refreshControl='Pull to refresh'
+                        onRefresh={() => console.log('Refresh')}
                         data={state.announce}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => {
                             return (
                                 <View style={styles.containerAnnounce}>
                                     <View>
-                                        {item.priority == 'DANGER' || item.priority == 'danger' ? <Text style={{ color: 'red', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO AD ALTA PRIORITA'</Text> : (item.priority == 'WARNING' || item.priority == 'warning' ? <Text style={{ color: colors.primary, fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO CON PRIORITA' CONTENUTA</Text> : <Text style={{ color: 'limegreen', fontWeight: "bold" , fontSize: 16 }}>ANNUNCIO A BASSA PRIORITA'</Text>)}
+                                        {item.priority == 'DANGER' || item.priority == 'danger' ? <Text style={{ color: 'red', fontWeight: "bold", fontSize: 16 }}>ANNUNCIO AD ALTA PRIORITA'</Text> : (item.priority == 'WARNING' || item.priority == 'warning' ? <Text style={{ color: colors.primary, fontWeight: "bold", fontSize: 16 }}>ANNUNCIO CON PRIORITA' CONTENUTA</Text> : <Text style={{ color: 'limegreen', fontWeight: "bold", fontSize: 16 }}>ANNUNCIO A BASSA PRIORITA'</Text>)}
                                     </View>
                                     <Text style={styles.announceCreator}>Inserito da {item.User.firstName} {item.User.lastName}</Text>
                                     <Text style={styles.message}>{item.message}</Text>
@@ -55,13 +65,13 @@ const styles = StyleSheet.create({
         borderColor: 'lightgrey',
         borderRadius: 6
     },
-    announceCreator:{
+    announceCreator: {
         fontSize: 14,
         color: 'darkgrey',
         fontWeight: "bold",
         marginVertical: 3
     },
-    message:{
+    message: {
     }
 });
 
